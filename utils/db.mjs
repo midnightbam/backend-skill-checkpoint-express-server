@@ -1,10 +1,20 @@
 // Create PostgreSQL Connection Pool here !
-import * as pg from "pg";
-const { Pool } = pg.default;
+import pkg from "pg";
+const { Pool } = pkg;
 
-const connectionPool = new Pool({
-  connectionString:
-    "postgresql://your-db-username:your-db-password@localhost:5432/your-db-name",
+const connectionString = "postgresql://postgres:postgres3@localhost:5432/quora_db";
+
+const pool = new Pool({
+  connectionString,
 });
 
-export default connectionPool;
+pool.on("connect", () => {
+  console.log("✅ Connected to PostgreSQL");
+});
+
+pool.on("error", (err) => {
+  console.error("❌ Unexpected PostgreSQL error", err);
+  process.exit(-1);
+});
+
+export default pool;
